@@ -1,30 +1,22 @@
-import OpenCrypto
+import Crypto
 
 
 extension HMAC {
     
-    static func signature(_ stringToSign: String, key: [UInt8]) -> HashedAuthenticationCode<H> {
-        let signature = HMAC<H>.authenticationCode(
-            for: stringToSign.bytes,
-            using: .init(data: key)
+    static func signatureData(_ stringToSign: String, key: [UInt8]) -> Data {
+        let mac = HMAC<H>.authenticationCode(
+            for: Array(stringToSign.utf8),
+            using: SymmetricKey(data: key)
         )
-        return signature
+        return Data(mac)
     }
     
-    static func signature(_ stringToSign: String, key: HashedAuthenticationCode<H>) -> HashedAuthenticationCode<H> {
-        let signature = HMAC<H>.authenticationCode(
-            for: stringToSign.bytes,
-            using: .init(data: key)
+    static func signatureData(_ stringToSign: String, key: Data) -> Data {
+        let mac = HMAC<H>.authenticationCode(
+            for: Array(stringToSign.utf8),
+            using: SymmetricKey(data: key)
         )
-        return signature
-    }
-    
-}
-
-extension HashedAuthenticationCode {
-    
-    var data: Data {
-        return Data(self)
+        return Data(mac)
     }
     
 }

@@ -46,7 +46,7 @@ public class S3: S3Client {
     public init(urlBuilder: URLBuilder, defaultBucket: String, signer: S3Signer) throws {
         self.defaultBucket = defaultBucket
         self.signer = signer
-        self.urlBuilder = nil
+        self.urlBuilder = urlBuilder
     }
     
 }

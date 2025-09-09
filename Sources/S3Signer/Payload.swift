@@ -1,5 +1,5 @@
 import Foundation
-import OpenCrypto
+import Crypto
 
 
 /// Payload object
@@ -30,9 +30,9 @@ extension Payload {
     func hashed() -> String {
         switch self {
         case .bytes(let bytes):
-            return SHA256.hash(data: [UInt8](bytes)).description
+            return SHA256.hash(data: bytes).hexString
         case .none:
-            return SHA256.hash(data: []).description
+            return SHA256.hash(data: Data()).hexString
         case .unsigned:
             return "UNSIGNED-PAYLOAD"
         }

@@ -1,40 +1,17 @@
 import Foundation
-import OpenCrypto
+import Crypto
 import NIOHTTP1
-import WebErrorKit
 
 
 /// S3 Client: All network calls to and from AWS' S3 servers
 public final class S3Signer {
     
     /// Errors
-    public enum Error: SerializableWebError {
+    public enum Error: Swift.Error {
         
         case badURL(String)
         case invalidEncoding
         case featureNotAvailableWithV2Signing
-        
-        public var serializedCode: String {
-            switch self {
-            case .badURL:
-                return "s3.bad_url"
-            case .invalidEncoding:
-                return "s3.invalid_encoding"
-            case .featureNotAvailableWithV2Signing:
-                return "s3.not_available_on_v2_signing"
-            }
-        }
-        
-        public var reason: String {
-            switch self {
-            case .badURL(let url):
-                return "Invalid URL: \(url)"
-            case .invalidEncoding:
-                return "Invalid encoding"
-            case .featureNotAvailableWithV2Signing:
-                return "Feature is not available on V2 signing"
-            }
-        }
         
     }
 

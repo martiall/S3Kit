@@ -1,5 +1,5 @@
 import Foundation
-import OpenCrypto
+import Crypto
 import NIOHTTP1
 import HTTPMediaTypes
 
@@ -50,16 +50,16 @@ extension S3Signer {
     }
     
     func createSignature(_ stringToSign: String, timeStampShort: String, region: Region) throws -> String {
-        let dateKey = HMAC<SHA256>.signature(timeStampShort, key: "AWS4\(config.secretKey)".bytes)
-        let dateRegionKey = HMAC<SHA256>.signature(region.name.description, key: dateKey)
-        let dateRegionServiceKey = HMAC<SHA256>.signature(config.service, key: dateRegionKey)
-        let signingKey = HMAC<SHA256>.signature("aws4_request", key: dateRegionServiceKey)
-        let signature = HMAC<SHA256>.signature(stringToSign, key: signingKey)
-        return signature.description
+        let dateKey = HMAC<SHA256>.signatureData(timeStampShort, key: Array("AWS4\(config.secretKey)".utf8))
+        let dateRegionKey = HMAC<SHA256>.signatureData(region.name.description, key: dateKey)
+        let dateRegionServiceKey = HMAC<SHA256>.signatureData(config.service, key: dateRegionKey)
+        let signingKey = HMAC<SHA256>.signatureData("aws4_request", key: dateRegionServiceKey)
+        let signature = HMAC<SHA256>.signatureData(stringToSign, key: signingKey)
+        return signature.hexString
     }
     
     func createStringToSign(_ canonicalRequest: String, dates: Dates, region: Region) throws -> String {
-        let canonRequestHash = SHA256.hash(data: canonicalRequest.bytes).description
+        let canonRequestHash = SHA256.hash(data: Data(canonicalRequest.utf8)).hexString
         let components = [
             "AWS4-HMAC-SHA256",
             dates.long,
@@ -148,10 +148,10 @@ extension S3Signer {
 		let canonicalizedAmzHeaders = canonicalHeadersV2(headers)
 		let canonicalizedResource = canonicalResourceV2(url: url, region: region, bucket: bucket)
 		let stringToSign = "\(method)\n\(contentMD5)\n\(contentType)\n\(date)\n\(canonicalizedAmzHeaders)\n\(canonicalizedResource)"
-        let signature = HMAC<Insecure.SHA1>.signature(stringToSign, key: config.secretKey.bytes)
-        let authHeader = "AWS \(config.accessKey):\(signature.data.base64EncodedString())"
-		return authHeader
-	}
+        let signature = HMAC<Insecure.SHA1>.signatureData(stringToSign, key: Array(config.secretKey.utf8))
+        let authHeader = "AWS \(config.accessKey):\(signature.base64EncodedString())"
+        return authHeader
+    }
 
     func generateAuthHeader(_ httpMethod: HTTPMethod, url: URL, headers: [String: String], bodyDigest: String, dates: Dates, region: Region) throws -> String {
 //        print("\n\n\n------------------- CRH:\n")
@@ -215,8 +215,10 @@ extension S3Signer {
     func update(headers: [String: String], url: URL, longDate: String, bodyDigest: String, region: Region?) -> [String: String] {
         var updatedHeaders = headers
         updatedHeaders["x-amz-date"] = longDate
-        if (updatedHeaders["Host"] ?? updatedHeaders["Host"]) == nil {
-            updatedHeaders["Host"] = (url.host ?? (region ?? config.region).host)
+        // normalize to lowercase header names to match expectations/tests
+        let currentHost = updatedHeaders["host"] ?? updatedHeaders["Host"]
+        if currentHost == nil {
+            updatedHeaders["host"] = (url.host ?? (region ?? config.region).host)
         }
 		if config.authVersion == .v4 && bodyDigest != "UNSIGNED-PAYLOAD" && config.service == "s3" {
             updatedHeaders["x-amz-content-sha256"] = bodyDigest
@@ -237,7 +239,7 @@ extension S3Signer {
 
         let region = region ?? config.region
 
-        updatedHeaders["Host"] = url.host ?? region.host
+        updatedHeaders["host"] = url.host?.lowercased() ?? region.host
 
         let (canonRequest, fullURL) = try presignedURLCanonRequest(httpMethod, dates: dates, expiration: expiration, url: url, region: region, headers: updatedHeaders)
 
@@ -278,9 +280,9 @@ extension S3Signer {
 
 		switch config.authVersion {
 			case .v2:
-				updatedHeaders["Authorization"] = try generateAuthHeaderV2(httpMethod, url: url, headers: updatedHeaders, dates: dates, region: region, bucket: bucket)
+				updatedHeaders["authorization"] = try generateAuthHeaderV2(httpMethod, url: url, headers: updatedHeaders, dates: dates, region: region, bucket: bucket)
 			case .v4:
-				updatedHeaders["Authorization"] = try generateAuthHeader(httpMethod, url: url, headers: updatedHeaders, bodyDigest: bodyDigest, dates: dates, region: region)
+				updatedHeaders["authorization"] = try generateAuthHeader(httpMethod, url: url, headers: updatedHeaders, bodyDigest: bodyDigest, dates: dates, region: region)
 		}
 
         var headers = HTTPHeaders()
