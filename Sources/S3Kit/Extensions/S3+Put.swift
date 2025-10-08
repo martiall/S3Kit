@@ -1,5 +1,7 @@
 import Foundation
-
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 // Helper S3 extension for uploading files by their URL/path
 extension S3 {

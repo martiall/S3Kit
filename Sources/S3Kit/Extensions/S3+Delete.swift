@@ -1,6 +1,8 @@
 import Foundation
 import NIO
-
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 // Helper S3 extension for deleting files by their URL/path
 extension S3 {

@@ -1,4 +1,5 @@
 {
+  "originHash" : "0f213c841ffb9b857dfe3c8488b6c8246f6248aef1e876236cf213ac7e987735",
   "pins" : [
     {
       "identity" : "async-http-client",
@@ -237,12 +238,12 @@
     {
       "identity" : "xmlcoding",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/LiveUI/XMLCoding.git",
+      "location" : "https://github.com/martiall/XMLCoding.git",
       "state" : {
-        "revision" : "8c760e960a5e53a5338c2871c4fcdf06b8c5ace4",
-        "version" : "0.4.0"
+        "branch" : "main",
+        "revision" : "89c09a831b059f74226cb903630311f72a7f4edb"
       }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

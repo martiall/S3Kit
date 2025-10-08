@@ -1,6 +1,8 @@
 import Foundation
 import NIO
-
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 extension S3 {
     

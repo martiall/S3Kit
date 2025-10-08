@@ -1,6 +1,8 @@
 import Foundation
 import HTTPMediaTypes
-
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 extension S3 {
     

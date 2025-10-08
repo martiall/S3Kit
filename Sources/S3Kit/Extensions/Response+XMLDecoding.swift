@@ -1,7 +1,9 @@
 import Foundation
 import XMLCoding
 import AsyncHTTPClient
-
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 extension HTTPClient.Response {
     

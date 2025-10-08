@@ -1,5 +1,5 @@
 /// AWS Region
-public struct Region {
+public struct Region: Sendable {
     
     /// Name of the region, see Name
     public let name: Name
@@ -10,7 +10,7 @@ public struct Region {
     /// Use TLS/https (defaults to true)
     public let useTLS: Bool
     
-    public struct Name: ExpressibleByStringLiteral, LosslessStringConvertible {
+    public struct Name: ExpressibleByStringLiteral, LosslessStringConvertible, Sendable {
         
         public typealias StringLiteralType = String
         

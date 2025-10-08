@@ -1,6 +1,8 @@
 import Foundation
 import S3Signer
-
+#if canImport(FoundationNetworking)
+import FoundationNetworking
+#endif
 
 // Helper S3 extension for working with buckets
 extension S3 {
