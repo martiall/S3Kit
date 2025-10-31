@@ -2,7 +2,7 @@ import Foundation
 
 
 /// Owner object
-public struct Owner: Codable {
+public struct Owner: Codable, Sendable {
     
     /// Owner's ID
     public let id: String

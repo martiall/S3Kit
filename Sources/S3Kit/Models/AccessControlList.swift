@@ -2,7 +2,7 @@ import Foundation
 
 
 /// Available access control list values for "x-amz-acl" header as specified in AWS documentation
-public enum AccessControlList: String, Codable {
+public enum AccessControlList: String, Codable, Sendable {
     
     /// Owner gets FULL_CONTROL. No one else has access rights (default).
     case privateAccess = "private"

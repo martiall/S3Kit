@@ -1,7 +1,7 @@
 import Foundation
 
 
-public struct BucketResults: Codable {
+public struct BucketResults: Codable, Sendable {
     
     /// Name of the bucket
     public let name: String
@@ -60,7 +60,7 @@ public struct BucketResults: Codable {
 }
 
 
-public struct CommonPrefix: Codable {
+public struct CommonPrefix: Codable, Sendable {
     
     /// Common prefix name
     let path: String

@@ -2,7 +2,7 @@ import Foundation
 
 
 /// Base object for /buckets endpoint
-public struct BucketsInfo: Codable {
+public struct BucketsInfo: Codable, Sendable {
     
     /// Owner
     public let owner: Owner?

@@ -2,7 +2,7 @@ import Foundation
 
 
 /// Generic response error message
-public struct ErrorMessage: Codable {
+public struct ErrorMessage: Codable, Sendable {
     
     /// Error code
     public let code: String

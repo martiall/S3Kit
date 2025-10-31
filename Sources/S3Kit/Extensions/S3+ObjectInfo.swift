@@ -34,7 +34,13 @@ extension S3 {
             return eventLoop.makeFailedFuture(error)
         }
 
-        return make(request: url, method: .HEAD, headers: headers, data: Data(), on: eventLoop).flatMapThrowing { response in
+        return make(
+            request: url,
+            method: .HEAD,
+            headers: headers,
+            data: Data(),
+            on: eventLoop
+        ).flatMapThrowing { response in
             try self.check(response)
             
             let bucket = file.bucket ?? self.defaultBucket

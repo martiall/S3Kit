@@ -6,7 +6,7 @@ import HTTPMediaTypes
 public struct File {
     
     /// File to be uploaded (PUT)
-    public struct Upload: LocationConvertible {
+    public struct Upload: LocationConvertible, Sendable {
         
         /// Data
         public internal(set) var data: Data
@@ -57,7 +57,7 @@ public struct File {
     }
     
     /// File to be located
-    public struct Location: LocationConvertible {
+    public struct Location: LocationConvertible, Sendable {
         
         /// Override target bucket
         public internal(set) var bucket: String?
@@ -78,7 +78,7 @@ public struct File {
     }
     
     /// File data response comming back from S3
-    public struct Response: Codable {
+    public struct Response: Codable, Sendable {
         
         /// Data
         public internal(set) var data: Data
@@ -98,7 +98,7 @@ public struct File {
     }
     
     /// Copy file response comming back from S3
-    public struct CopyResponse: Codable {
+    public struct CopyResponse: Codable, Sendable {
         
         /// ETag
         public let etag: String
@@ -114,7 +114,7 @@ public struct File {
     }
     
     /// File info response comming back from S3
-    public struct Info: Codable {
+    public struct Info: Codable, Sendable {
         
         /// Override target bucket
         public internal(set) var bucket: String

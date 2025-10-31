@@ -2,10 +2,10 @@ import Foundation
 
 
 /// Bucket model
-public struct Bucket: Codable {
+public struct Bucket: Codable, Sendable {
     
     /// Creating new bucket
-    public struct New: Codable {
+    public struct New: Codable, Sendable {
         
         /// Name of the new bucket
         public let name: String
@@ -22,7 +22,7 @@ public struct Bucket: Codable {
     }
     
     /// Bucket location object
-    public struct Location: Codable {
+    public struct Location: Codable, Sendable {
         
         /// Location of the bucket
         public let region: String

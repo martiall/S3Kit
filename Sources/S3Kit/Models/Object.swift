@@ -2,7 +2,7 @@ import Foundation
 
 
 /// S3 object
-public struct Object: Codable {
+public struct Object: Codable, Sendable {
     
     /// The object's key / file name
     public let fileName: String
